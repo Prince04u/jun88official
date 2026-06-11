@@ -1,22 +1,41 @@
+```ts
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { PAGES } from "@/lib/site-content";
 
-const BASE_URL = "";
+const BASE_URL = "https://YOUR-DOMAIN.COM";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const today = new Date().toISOString().split("T")[0];
+
         const urls = PAGES.map((p) => {
           const path = p.slug === "" ? "/" : `/${p.slug}`;
-          return `  <url>\n    <loc>${BASE_URL}${path}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${p.slug === "" ? "1.0" : "0.7"}</priority>\n  </url>`;
-        }).join("\n");
-        const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`;
+
+          return `
+  <url>
+    <loc>${BASE_URL}${path}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${p.slug === "" ? "1.0" : "0.7"}</priority>
+  </url>`;
+        }).join("");
+
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`;
+
         return new Response(xml, {
-          headers: { "Content-Type": "application/xml", "Cache-Control": "public, max-age=3600" },
+          headers: {
+            "Content-Type": "application/xml; charset=utf-8",
+            "Cache-Control": "public, max-age=3600",
+          },
         });
       },
     },
   },
 });
+```
