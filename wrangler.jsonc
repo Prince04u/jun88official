@@ -1,12 +1,13 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "jun88official",
-  "compatibility_date": "2026-06-11",
-  "observability": {
-    "enabled": true
-  },
   "main": "dist/server/server.js",
+  "compatibility_date": "2026-06-11",
   "compatibility_flags": [
     "nodejs_compat"
-  ]
+  ],
+
+  "assets": {
+    "directory": "./dist/client"
+  }
 }
